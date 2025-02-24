@@ -17,6 +17,15 @@ public class MainGame {
         Background background = new Background(gamePanel, ResourceLoader.loadImage("/background.jpeg"));
         // Crea il giocatore e aggiungilo al game panel
         Player player = new Player(gamePanel, 300, 300, 200, 200, playerImage);
+        Collision2D playerCollision = new Collision2D(gamePanel, 0, 0, 100, 100, player, new Color(255, 0, 0, 40));
+        Collision2D muretto = new Collision2D(gamePanel, 0, 0, 50, 300, new Color(0, 255, 0));
+        playerCollision.setDebugMode(true);
+        muretto.setDebugMode(true);
+
+
+        DraggableSprite draggableSprite = new DraggableSprite(gamePanel, 300, 300, 100, 100, playerImage);
+
+
 
         // Istanza di TextSprite con il messaggio, font, larghezza e allineamento specificati
         TextSprite textSprite = new TextSprite(gamePanel,gamePanel.getWidth()/2, gamePanel.getHeight()/2, "aiutooooo\nsono down", "center", defaultFontFile, new Color(0, 255, 0), 5);

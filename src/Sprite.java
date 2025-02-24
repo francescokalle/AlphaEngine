@@ -1,17 +1,15 @@
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class Sprite {
     protected int x, y, width, height;
     protected Animation animation;
     protected BufferedImage staticImage; // Per immagini statiche
     protected int zIndex = 0; // Valore di default zIndex è 0
+    protected double rotationAngle = 0; // Angolo di rotazione (in gradi)
 
-    //Costruttore default !!!PERICOLO!!!
-    public  Sprite(GamePanel gamePanel){
+    // Costruttore default !!!PERICOLO!!!
+    public Sprite(GamePanel gamePanel) {
         gamePanel.addSprite(this);
     }
 
@@ -55,22 +53,57 @@ public class Sprite {
         }
     }
 
-    // Metodo di disegno che tiene conto dello zIndex
+    // Metodo di disegno che tiene conto dello zIndex e della rotazione
     public void draw(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g.create();  // Crea una copia del contesto grafico
+
+        // Traslazione: porta l'origine al centro dell'oggetto (pivot)
+        g2d.translate(x + width / 2, y + height / 2);
+
+        // Ruota l'oggetto (l'angolo di rotazione è in gradi, quindi lo convertiamo in radianti)
+        g2d.rotate(Math.toRadians(rotationAngle));
+
+        // Disegna l'immagine centrata (con la rotazione applicata)
         if (animation != null) {
-            g.drawImage(animation.getCurrentFrame(), x, y, width, height, null);
+            g2d.drawImage(animation.getCurrentFrame(), -width / 2, -height / 2, width, height, null);
         } else if (staticImage != null) {
-            g.drawImage(staticImage, x, y, width, height, null);
+            g2d.drawImage(staticImage, -width / 2, -height / 2, width, height, null);
         }
+
+        // Non è necessario chiamare restore(), perché quando il metodo esce dallo scope, lo stato grafico verrà ripristinato automaticamente.
+        g2d.dispose();  // Chiude la copia del contesto grafico
     }
 
-    // Getter per il zIndex
-    public int getZIndex() {
-        return zIndex;
+
+    public int getX() {
+        return x;
     }
 
-    // Setter per il zIndex
-    public void setZIndex(int zIndex) {
-        this.zIndex = zIndex;
+    public int getY() {
+        return y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 }
