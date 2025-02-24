@@ -8,28 +8,30 @@ public class TextSprite extends Sprite implements TextRenderer {
     private String text;
     private File fontFile;
     private Font font;
-    private int alignment;
+    private String alignment;
     private Color textColor;
     private int scalingFactor = 1;  // Valore di default per il scaling
-
-    // Costanti di allineamento
-    public static final int LEFT = 0;
-    public static final int CENTER = 1;
-    public static final int RIGHT = 2;
+    private int fontSize;
+    private int originalX;
 
     // Costruttore che inizializza il testo, il font e il colore
-    public TextSprite(GamePanel gamePanel, int x, int y, String text, File fontFile, Color color) throws IOException, FontFormatException {
+    public TextSprite(GamePanel gamePanel, int x, int y, String text, String alignment, File fontFile, Color color, int fontSize) throws IOException, FontFormatException {
+
         super(gamePanel, x, y, 0, 0);  // Passiamo width e height come 0, lo calcoleremo dopo
         this.fontFile = fontFile;
         this.font = Font.createFont(Font.TRUETYPE_FONT , fontFile);
         this.text = text;
         this.textColor = color != null ? color : Color.BLACK;  // Usa il colore passato, se presente
-        this.alignment = LEFT;  // Default alignment
+        this.alignment = alignment;  // Default alignment
+        this.fontSize = fontSize;
+        this.originalX = x;
+
+        System.out.println(text);
 
         // Gestisci il font e il possibile scaling
         if (fontFile.getName().contains(".pixelated.")) {
             extractScalingFactorFromFont(fontFile.getName());
-            System.out.printf("Font pixelato trovato con scaling factor: %d\n", scalingFactor);
+            System.out.printf("Font pixelato trovato con scaling factor: "+scalingFactor);
         }
 
         // Calcola automaticamente le dimensioni
@@ -48,11 +50,11 @@ public class TextSprite extends Sprite implements TextRenderer {
             String[] parts = fontName.split("\\.");
             if (parts.length >= 3 && parts[1].equals("pixelated")) {
                 // Ottieni il fattore di scaling (la parte dopo ".pixelated.")
-                scalingFactor = Integer.parseInt(parts[2]);
+                scalingFactor = Integer.parseInt(parts[2]) * fontSize;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            scalingFactor = 1;  // Imposta a 1 se non è possibile analizzare il file
+            scalingFactor = fontSize;  // Imposta a 1 se non è possibile analizzare il file
             System.out.println("Impossibile estrarre il scaling factor, valore di default impostato a 1.");
         }
     }
@@ -104,13 +106,10 @@ public class TextSprite extends Sprite implements TextRenderer {
 
         // Allineamento orizzontale
         switch (alignment) {
-            case CENTER:
-                xPos = (width - textWidth) / 2;
+            case "center":
+                x = this.originalX - textWidth / 2;
                 break;
-            case RIGHT:
-                xPos = width - textWidth;
-                break;
-            case LEFT:
+            case "left":
             default:
                 xPos = 0;
                 break;
@@ -130,7 +129,7 @@ public class TextSprite extends Sprite implements TextRenderer {
     }
 
     // Imposta l'allineamento del testo
-    public void setAlignment(int alignment) {
+    public void setAlignment(String alignment) {
         this.alignment = alignment;
     }
 

@@ -16,10 +16,10 @@ public class MainGame {
         //Crea Sfondo
         Background background = new Background(gamePanel, ResourceLoader.loadImage("/background.jpeg"));
         // Crea il giocatore e aggiungilo al game panel
-        Player player = new Player(gamePanel, 300, 300, 500, 500, playerImage);
+        Player player = new Player(gamePanel, 300, 300, 200, 200, playerImage);
 
         // Istanza di TextSprite con il messaggio, font, larghezza e allineamento specificati
-        TextSprite textSprite = new TextSprite(gamePanel,10, 10, "la lara e' bella", defaultFontFile, new Color(0, 255, 0));
+        TextSprite textSprite = new TextSprite(gamePanel,gamePanel.getWidth()/2, gamePanel.getHeight()/2, "aiutooooo\nsono down", "center", defaultFontFile, new Color(0, 255, 0), 5);
 
         // Avvia i thread
         GameLoop gameLoop = new GameLoop(gamePanel);
