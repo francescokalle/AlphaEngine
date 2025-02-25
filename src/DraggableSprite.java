@@ -7,13 +7,13 @@ public class DraggableSprite extends Sprite {
     private boolean dragging = false;
     private int offsetX, offsetY; // Offset per mantenere la posizione relativa al cursore
 
-    public DraggableSprite(GamePanel gamePanel, int x, int y, int width, int height, BufferedImage staticImage) {
-        super(gamePanel, x, y, width, height, staticImage);
+    public DraggableSprite(GamePanel gamePanel, Vector2 position, int width, int height, BufferedImage staticImage) {
+        super(gamePanel, position, width, height, staticImage);
         addMouseListeners(gamePanel);
     }
 
-    public DraggableSprite(GamePanel gamePanel, int x, int y, int width, int height, Animation animation) {
-        super(gamePanel, x, y, width, height, animation);
+    public DraggableSprite(GamePanel gamePanel, Vector2 position, int width, int height, Animation animation) {
+        super(gamePanel, position, width, height, animation);
         addMouseListeners(gamePanel);
     }
 
@@ -23,8 +23,8 @@ public class DraggableSprite extends Sprite {
             public void mousePressed(MouseEvent e) {
                 if (isMouseOver(e.getX(), e.getY())) {
                     dragging = true;
-                    offsetX = e.getX() - x;
-                    offsetY = e.getY() - y;
+                    offsetX = (int) (e.getX() - position.x);
+                    offsetY = (int) (e.getY() - position.y);
                 }
             }
 
@@ -38,14 +38,14 @@ public class DraggableSprite extends Sprite {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (dragging) {
-                    x = e.getX() - offsetX;
-                    y = e.getY() - offsetY;
+                    position.x = e.getX() - offsetX;
+                    position.y = e.getY() - offsetY;
                 }
             }
         });
     }
 
     private boolean isMouseOver(int mouseX, int mouseY) {
-        return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
+        return mouseX >= position.x && mouseX <= position.x + width && mouseY >= position.y && mouseY <= position.y + height;
     }
 }

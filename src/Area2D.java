@@ -7,17 +7,17 @@ public class Area2D extends Sprite {
     protected boolean debugMode = false;
     private List<Area2D> detectedAreas = new ArrayList<>();
 
-    public Area2D(GamePanel gamePanel, int x, int y, int width, int height, BufferedImage staticImage) {
-        super(gamePanel, x, y, width, height, staticImage);
+    public Area2D(GamePanel gamePanel, Vector2 position, int width, int height, BufferedImage staticImage) {
+        super(gamePanel, position, width, height, staticImage);
         //System.out.println(staticImage);
     }
 
-    public Area2D(GamePanel gamePanel, int x, int y, int width, int height, Animation animation) {
-        super(gamePanel, x, y, width, height, animation);
+    public Area2D(GamePanel gamePanel, Vector2 position, int width, int height, Animation animation) {
+        super(gamePanel, position, width, height, animation);
     }
 
-    public Area2D(GamePanel gamePanel, int x, int y, int width, int height) {
-        super(gamePanel, x, y, width, height);
+    public Area2D(GamePanel gamePanel, Vector2 position, int width, int height) {
+        super(gamePanel, position, width, height);
     }
 
     public void enableDebug(boolean debug) {
@@ -35,8 +35,8 @@ public class Area2D extends Sprite {
     }
 
     protected boolean isColliding(Area2D other) {
-        return this.x < other.x + other.width && this.x + this.width > other.x &&
-                this.y < other.y + other.height && this.y + this.height > other.y;
+        return this.position.x < other.position.x + other.width && this.position.x + this.width > other.position.x &&
+                this.position.y < other.position.y + other.height && this.position.y + this.height > other.position.y;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Area2D extends Sprite {
         // Se il debug mode è attivo, puoi disegnare anche l'area in evidenza
         if (debugMode) {
             g.setColor(new Color(255, 0, 255, 100)); // Viola trasparente per debug
-            g.fillRect(x, y, width, height);
+            g.fillRect(((int) position.x), ((int) position.y), width, height);
         }
     }
 }

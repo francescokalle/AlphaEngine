@@ -9,8 +9,7 @@ public class Background extends Sprite{
     public Background(GamePanel gamePanel, Animation animation) {
         super(gamePanel);
         //GamePanel gamePanel, int x, int y, int width, int height, Animation animation
-        super.x = 0;
-        super.y = 0;
+        super.position = new Vector2().ZERO();
         super.width = gamePanel.getWidth();
         super.height = gamePanel.getHeight();
         super.animation = animation;
@@ -20,8 +19,7 @@ public class Background extends Sprite{
     // Costruttore per sprite statico
     public Background(GamePanel gamePanel, BufferedImage staticImage) {
         super(gamePanel);
-        super.x = 0;
-        super.y = 0;
+        super.position = new Vector2().ZERO();
         super.width = gamePanel.getWidth();
         super.height = gamePanel.getHeight();
         super.staticImage = staticImage;
@@ -31,8 +29,7 @@ public class Background extends Sprite{
     // Costruttore per sprite senza grafica
     public Background(GamePanel gamePanel) {
         super(gamePanel);
-        super.x = 0;
-        super.y = 0;
+        super.position = new Vector2().ZERO();
         super.width = gamePanel.getWidth();
         super.height = gamePanel.getHeight();
         super.zIndex = default_zIndex;

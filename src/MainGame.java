@@ -7,6 +7,8 @@ public class MainGame {
     public static void main(String[] args) throws IOException, FontFormatException {
         GameWindow gameWindow = new GameWindow();
         GamePanel gamePanel = gameWindow.getGamePanel();
+        Input input = new Input(gamePanel);
+
         File defaultFontFile = new File("resources/fonts/defaultfont.pixelated.20.otf");
 
         // Carica la sprite sheet per il player
@@ -16,17 +18,17 @@ public class MainGame {
         //Crea Sfondo
         Background background = new Background(gamePanel, ResourceLoader.loadImage("/background.jpeg"));
         // Crea il giocatore e aggiungilo al game panel
-        Player player = new Player(gamePanel, 300, 300, 200, 200, playerImage);
-        Collision2D muretto = new Collision2D(gamePanel, 100, 100, 30, 600);
+        Player player = new Player(gamePanel, new Vector2(600, 600), 200, 200, playerImage);
+        Collision2D muretto = new Collision2D(gamePanel, new Vector2(100, 100), 30, 600);
         muretto.enableDebug(true);
 
 
-        DraggableSprite draggableSprite = new DraggableSprite(gamePanel, 300, 300, 100, 100, playerImage);
+        DraggableSprite draggableSprite = new DraggableSprite(gamePanel, new Vector2(300, 300), 100, 100, playerImage);
 
 
 
         // Istanza di TextSprite con il messaggio, font, larghezza e allineamento specificati
-        TextSprite textSprite = new TextSprite(gamePanel,gamePanel.getWidth()/2, gamePanel.getHeight()/2, "aiutooooo\nsono down", "center", defaultFontFile, new Color(0, 255, 0), 5);
+        TextSprite textSprite = new TextSprite(gamePanel,new Vector2((float) gamePanel.getWidth() /2, (float) gamePanel.getHeight() /2), "aiutooooo\nsono down", "center", defaultFontFile, new Color(0, 255, 0), 5);
 
         // Avvia i thread
         GameLoop gameLoop = new GameLoop(gamePanel);

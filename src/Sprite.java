@@ -2,7 +2,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Sprite {
-    protected int x, y, width, height;
+    protected int width, height;
+    protected Vector2 position = new Vector2(0, 0);
     protected Animation animation;
     protected BufferedImage staticImage; // Per immagini statiche
     protected int zIndex = 0; // Valore di default zIndex è 0
@@ -14,9 +15,8 @@ public class Sprite {
     }
 
     // Costruttore per sprite con animazione
-    public Sprite(GamePanel gamePanel, int x, int y, int width, int height, Animation animation) {
-        this.x = x;
-        this.y = y;
+    public Sprite(GamePanel gamePanel, Vector2 position, int width, int height, Animation animation) {
+        this.position = position;
         this.width = width;
         this.height = height;
         this.animation = animation;
@@ -25,9 +25,8 @@ public class Sprite {
     }
 
     // Costruttore per sprite statico
-    public Sprite(GamePanel gamePanel, int x, int y, int width, int height, BufferedImage staticImage) {
-        this.x = x;
-        this.y = y;
+    public Sprite(GamePanel gamePanel, Vector2 position, int width, int height, BufferedImage staticImage) {
+        this.position = position;
         this.width = width;
         this.height = height;
         this.staticImage = staticImage;
@@ -36,9 +35,8 @@ public class Sprite {
     }
 
     // Costruttore per sprite senza grafica
-    public Sprite(GamePanel gamePanel, int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
+    public Sprite(GamePanel gamePanel, Vector2 position, int width, int height) {
+        this.position = position;
         this.width = width;
         this.height = height;
         this.staticImage = null;
@@ -58,7 +56,7 @@ public class Sprite {
         Graphics2D g2d = (Graphics2D) g.create();  // Crea una copia del contesto grafico
 
         // Traslazione: porta l'origine al centro dell'oggetto (pivot)
-        g2d.translate(x + width / 2, y + height / 2);
+        g2d.translate(position.x + (float) width / 2, position.y + (float)height / 2);
 
         // Ruota l'oggetto (l'angolo di rotazione è in gradi, quindi lo convertiamo in radianti)
         g2d.rotate(Math.toRadians(rotationAngle));
@@ -75,12 +73,8 @@ public class Sprite {
     }
 
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
+    public Vector2 getPosition() {
+        return  position;
     }
 
     public int getWidth() {
@@ -91,12 +85,8 @@ public class Sprite {
         return height;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+    public void setPosition(Vector2 position) {
+        this.position = position;
     }
 
     public void setWidth(int width) {

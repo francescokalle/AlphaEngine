@@ -15,16 +15,16 @@ public class TextSprite extends Sprite implements TextRenderer {
     private int originalX;
 
     // Costruttore che inizializza il testo, il font e il colore
-    public TextSprite(GamePanel gamePanel, int x, int y, String text, String alignment, File fontFile, Color color, int fontSize) throws IOException, FontFormatException {
+    public TextSprite(GamePanel gamePanel, Vector2 position, String text, String alignment, File fontFile, Color color, int fontSize) throws IOException, FontFormatException {
 
-        super(gamePanel, x, y, 0, 0);  // Passiamo width e height come 0, lo calcoleremo dopo
+        super(gamePanel, position, 0, 0);  // Passiamo width e height come 0, lo calcoleremo dopo
         this.fontFile = fontFile;
         this.font = Font.createFont(Font.TRUETYPE_FONT , fontFile);
         this.text = text;
         this.textColor = color != null ? color : Color.BLACK;  // Usa il colore passato, se presente
         this.alignment = alignment;  // Default alignment
         this.fontSize = fontSize;
-        this.originalX = x;
+        this.originalX = (int)position.x;
 
         System.out.println(text);
 
@@ -107,7 +107,7 @@ public class TextSprite extends Sprite implements TextRenderer {
         // Allineamento orizzontale
         switch (alignment) {
             case "center":
-                x = this.originalX - textWidth / 2;
+                position.x = this.originalX - textWidth / 2;
                 break;
             case "left":
             default:
@@ -146,6 +146,6 @@ public class TextSprite extends Sprite implements TextRenderer {
     @Override
     public void draw(Graphics g) {
         BufferedImage textImage = generateTextImage(text, width, height);
-        g.drawImage(textImage, x, y, null);
+        g.drawImage(textImage, (int) position.x, (int) position.y, null);
     }
 }

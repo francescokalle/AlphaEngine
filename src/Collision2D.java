@@ -5,15 +5,15 @@ import java.util.List;
 public class Collision2D extends Area2D {
     private List<Collision2D> detectedCollisions = new ArrayList<>();
 
-    public Collision2D(GamePanel gamePanel, int x, int y, int width, int height, BufferedImage staticImage) {
-        super(gamePanel, x, y, width, height, staticImage);
+    public Collision2D(GamePanel gamePanel, Vector2 position, int width, int height, BufferedImage staticImage) {
+        super(gamePanel, position, width, height, staticImage);
     }
-    public Collision2D(GamePanel gamePanel, int x, int y, int width, int height, Animation animation) {
-        super(gamePanel, x, y, width, height, animation);
+    public Collision2D(GamePanel gamePanel, Vector2 position, int width, int height, Animation animation) {
+        super(gamePanel, position, width, height, animation);
     }
 
-    public Collision2D(GamePanel gamePanel, int x, int y, int width, int height) {
-        super(gamePanel, x, y, width, height);
+    public Collision2D(GamePanel gamePanel, Vector2 position, int width, int height) {
+        super(gamePanel, position, width, height);
     }
 
     public void enableDebug(boolean debug) {
