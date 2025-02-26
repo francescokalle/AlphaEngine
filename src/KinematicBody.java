@@ -1,21 +1,18 @@
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
-public class Player extends Collision2D{
-    private int speed = 2;
+public class KinematicBody extends Collision2D{
+    private int speed = 5;
     private Vector2 direction = new Vector2().ZERO();
     private GamePanel gamePanel; // Riferimento a GamePanel
 
     // Costruttore per animazione
-    public Player(GamePanel gamePanel, Vector2 position, int width, int height, Animation animation) {
+    public KinematicBody(GamePanel gamePanel, Vector2 position, int width, int height, Animation animation) {
         super(gamePanel, position, width, height, animation);
         this.gamePanel = gamePanel; // Salvo il riferimento
     }
 
     // Costruttore per immagine statica
-    public Player(GamePanel gamePanel, Vector2 position, int width, int height, BufferedImage staticImage) {
+    public KinematicBody(GamePanel gamePanel, Vector2 position, int width, int height, BufferedImage staticImage) {
         super(gamePanel, position, width, height, staticImage);
         this.gamePanel = gamePanel; // Salvo il riferimento
     }
@@ -36,6 +33,11 @@ public class Player extends Collision2D{
         if(Input.isKeyPressed('d')){
             direction.x = 1;
         }
+
+        if(Input.isKeyPressed('u')){
+            System.out.println(unstick());
+        }
+
         moveAndCollide();
         super.update();
     }
@@ -60,7 +62,6 @@ public class Player extends Collision2D{
             position.y += direction.y * speed;
         }
     }
-
 
     // Controlla se il movimento è bloccato
     private boolean isBlocked(int nextX, int nextY) {

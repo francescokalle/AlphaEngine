@@ -41,17 +41,20 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Disegna gli sprite
+        // Ordina gli sprite in base allo zIndex (dal più piccolo al più grande)
+        sprites.sort((sprite1, sprite2) -> Integer.compare(sprite1.getZIndex(), sprite2.getZIndex()));
+
+        // Disegna gli sprite ordinati
         for (Sprite sprite : sprites) {
             sprite.draw(g);
         }
 
-        // Disegna le aree di debug
+        // Disegna le aree di debug (se necessario)
         for (Area2D area : areas) {
             area.draw(g);
         }
 
-        // Disegna le collisioni di debug
+        // Disegna le collisioni di debug (se necessario)
         for (Collision2D collision : collisions) {
             collision.draw(g);
         }

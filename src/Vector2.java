@@ -52,6 +52,10 @@ public class Vector2 {
         return new Vector2(0, 0);
     }
 
+    public Vector2 value(){
+        return new Vector2(this.x, this.y);
+    }
+
     @Override
     public String toString() {
         return "Vector2{x=" + x + ", y=" + y + "}";

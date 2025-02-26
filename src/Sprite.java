@@ -8,6 +8,7 @@ public class Sprite {
     protected BufferedImage staticImage; // Per immagini statiche
     protected int zIndex = 0; // Valore di default zIndex è 0
     protected double rotationAngle = 0; // Angolo di rotazione (in gradi)
+    protected Sprite stickedTo = null;
 
     // Costruttore default !!!PERICOLO!!!
     public Sprite(GamePanel gamePanel) {
@@ -48,6 +49,33 @@ public class Sprite {
     public void update() {
         if (animation != null) {
             animation.update();
+        }
+    }
+
+    public boolean stickTo(Sprite other){
+        if(other.stickedTo == null){
+            this.stickedTo = other;
+            other.stickedTo = this;
+
+            this.position = stickedTo.position;
+            stickedTo.position = this.position;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean unstick(){
+        if (this.stickedTo != null){
+            this.position = this.position.value();
+            stickedTo.position = stickedTo.position.value();
+
+            stickedTo.stickedTo = null;
+            this.stickedTo = null;
+
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -95,5 +123,13 @@ public class Sprite {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getZIndex() {
+        return zIndex;
+    }
+
+    public void setZIndex(int zIndex) {
+        this.zIndex = zIndex;
     }
 }
