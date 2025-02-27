@@ -3,7 +3,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GamePanel extends JPanel {
+public class  GamePanel extends JPanel {
     private List<Sprite> sprites = new CopyOnWriteArrayList<>();
     private List<Collision2D> collisions = new CopyOnWriteArrayList<>();
     private List<Area2D> areas = new CopyOnWriteArrayList<>();
@@ -23,6 +23,10 @@ public class GamePanel extends JPanel {
         if (sprite instanceof Area2D) {
             areas.add((Area2D) sprite);
         }
+    }
+
+    public void removeSprite(Sprite sprite) {
+        sprites.remove(sprite);
     }
 
     public List<Collision2D> getAllCollisions() {
@@ -50,7 +54,7 @@ public class GamePanel extends JPanel {
 
         // Disegna gli sprite ordinati
         for (Sprite sprite : sprites) {
-            System.out.println(sprite.toString());
+            //System.out.println(sprite.toString());
             sprite.draw(g);
         }
     }

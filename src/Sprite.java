@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import static java.lang.System.gc;
+
 public class Sprite {
     protected int width, height;
     protected Vector2 position = new Vector2(0, 0);
@@ -98,6 +100,27 @@ public class Sprite {
 
         // Non è necessario chiamare restore(), perché quando il metodo esce dallo scope, lo stato grafico verrà ripristinato automaticamente.
         g2d.dispose();  // Chiude la copia del contesto grafico
+    }
+
+    public void destroy(GamePanel gamePanel) {
+        // Rimuovi lo sprite dal GamePanel, se il GamePanel ha una lista di sprite
+        if (gamePanel != null) {
+            gamePanel.removeSprite(this); // Supponiamo che GamePanel abbia un metodo removeSprite
+        }
+
+        // Impostiamo gli altri riferimenti relativi allo sprite a null
+        this.stickedTo = null;
+
+        // Se il sprite è un'immagine, possiamo anche impostarla su null per risparmiare memoria (se appropriato)
+        this.staticImage = null;
+        this.animation = null;
+
+        // Impostiamo la posizione e altre variabili a valori neutri, se necessario
+        this.position = null;  // Set null, or reset to default Vector2(0,0)
+
+        // Eventualmente possiamo anche rimuovere altri riferimenti che potrebbero esserci per lo sprite (ad esempio, se lo sprite è legato a altri oggetti o eventi)
+
+        gc();
     }
 
 

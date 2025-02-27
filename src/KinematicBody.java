@@ -34,10 +34,6 @@ public class KinematicBody extends Collision2D{
             direction.x = 1;
         }
 
-        if(Input.isKeyPressed('u')){
-            System.out.println(unstick());
-        }
-
         moveAndCollide();
         super.update();
     }
