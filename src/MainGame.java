@@ -22,12 +22,9 @@ public class MainGame {
         Collision2D muretto = new Collision2D(gamePanel, new Vector2(100, 100), 30, 600);
         muretto.enableDebug(true);
         DraggableSprite draggableSprite = new DraggableSprite(gamePanel, new Vector2(300, 300), 100, 100, playerImage);
-        draggableSprite.setZIndex(100);
         player.stickTo(draggableSprite);
-
-        // Istanza di TextSprite con il messaggio, font, larghezza e allineamento specificati
         TextSprite textSprite = new TextSprite(gamePanel,new Vector2((float) gamePanel.getWidth() /2, (float) gamePanel.getHeight() /2), "aiutooooo\nsono down", "center", defaultFontFile, new Color(0, 255, 0), 5);
-
+        textSprite.setZIndex(-9);
         // Avvia i thread
         GameLoop gameLoop = new GameLoop(gamePanel);
         Renderer renderer = new Renderer(gamePanel);

@@ -10,6 +10,9 @@ public class GamePanel extends JPanel {
 
     public GamePanel() {
         setPreferredSize(new Dimension(1600, 1200));
+        setDoubleBuffered(false);
+        setIgnoreRepaint(true);
+
     }
 
     public void addSprite(Sprite sprite) {
@@ -43,20 +46,12 @@ public class GamePanel extends JPanel {
 
         // Ordina gli sprite in base allo zIndex (dal più piccolo al più grande)
         sprites.sort((sprite1, sprite2) -> Integer.compare(sprite1.getZIndex(), sprite2.getZIndex()));
+        //System.out.println(sprites.toString());
 
         // Disegna gli sprite ordinati
         for (Sprite sprite : sprites) {
+            System.out.println(sprite.toString());
             sprite.draw(g);
-        }
-
-        // Disegna le aree di debug (se necessario)
-        for (Area2D area : areas) {
-            area.draw(g);
-        }
-
-        // Disegna le collisioni di debug (se necessario)
-        for (Collision2D collision : collisions) {
-            collision.draw(g);
         }
     }
 }
