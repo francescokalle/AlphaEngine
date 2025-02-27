@@ -1,3 +1,4 @@
+import javax.sound.sampled.AudioInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,6 +26,9 @@ public class MainGame {
         //player.stickTo(draggableSprite);
         TextSprite textSprite = new TextSprite(gamePanel,new Vector2((float) gamePanel.getWidth() /2, (float) gamePanel.getHeight() /2), "aiutooooo\nsono down", "center", defaultFontFile, new Color(0, 255, 0), 5);
         textSprite.setZIndex(-9);
+
+        AudioPlayer.play("audio/alpha.wav");
+
         // Avvia i thread
         GameLoop gameLoop = new GameLoop(gamePanel);
         Renderer renderer = new Renderer(gamePanel);
