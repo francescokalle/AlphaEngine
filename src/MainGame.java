@@ -1,4 +1,8 @@
-import javax.sound.sampled.AudioInputStream;
+import basics.*;
+import gameObjects.*;
+import graphics.GamePanel;
+import graphics.Renderer;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,20 +18,18 @@ public class MainGame {
 
         // Carica la sprite sheet per il player
         BufferedImage playerImage = ResourceLoader.loadImage("/player.png"); // Assicurati di avere questa immagine nella cartella resources
-        //Animation playerAnimation = new Animation(spriteSheet, 4, 64, 64, 10); // 4 frame, ogni frame 64x64
+        //graphics.Animation playerAnimation = new graphics.Animation(spriteSheet, 4, 64, 64, 10); // 4 frame, ogni frame 64x64
 
         //Crea Sfondo
         Background background = new Background(gamePanel, ResourceLoader.loadImage("/background.jpeg"));
         // Crea il giocatore e aggiungilo al game panel
-        KinematicBody player = new KinematicBody(gamePanel, new Vector2(600, 600), 200, 200, playerImage);
-        Collision2D muretto = new Collision2D(gamePanel, new Vector2(100, 100), 30, 600);
+        KinematicBody player = new KinematicBody(gamePanel, new Vector2(600, 600), new Vector2(200, 200), playerImage);
+        Collision2D muretto = new Collision2D(gamePanel, new Vector2(100, 100), new Vector2(30, 600));
         muretto.enableDebug(true);
-        DraggableSprite draggableSprite = new DraggableSprite(gamePanel, new Vector2(300, 300), 100, 100, playerImage);
+        DraggableSprite draggableSprite = new DraggableSprite(gamePanel, new Vector2(300, 300), new Vector2(100, 100), playerImage);
         //player.stickTo(draggableSprite);
         TextSprite textSprite = new TextSprite(gamePanel,new Vector2((float) gamePanel.getWidth() /2, (float) gamePanel.getHeight() /2), "aiutooooo\nsono down", "center", defaultFontFile, new Color(0, 255, 0), 5);
         textSprite.setZIndex(-9);
-
-        AudioPlayer.play("audio/alpha.wav");
 
         // Avvia i thread
         GameLoop gameLoop = new GameLoop(gamePanel);
