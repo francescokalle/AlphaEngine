@@ -36,7 +36,7 @@ public class MainGame {
         TextSprite textSprite = new TextSprite(gamePanel,new Vector2((float) gamePanel.getWidth() /2, (float) gamePanel.getHeight() /2), "aiutooooo\nsono down", "right", defaultFontFile, new Color(0, 255, 0), 5);
         textSprite.setZIndex(-9);
 
-        Button button = new Button(gamePanel, new Vector2(400, 300),  new Vector2(400, 200));
+        Button button = new Button(gamePanel, new Vector2(400, 300),  new Vector2(400, 200), "/button");
 
         // Avvia i thread
         GameLoop gameLoop = new GameLoop(gamePanel);
