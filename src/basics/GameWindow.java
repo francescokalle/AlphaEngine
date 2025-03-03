@@ -5,12 +5,12 @@ import graphics.GamePanel;
 import javax.swing.*;
 
 public class GameWindow {
-    private JFrame frame;
-    private GamePanel gamePanel;
+    public JFrame frame;
+    public GamePanel gamePanel;
 
     public GameWindow() {
         frame = new JFrame("AlphaEngine Test1");
-        gamePanel = new GamePanel();
+        gamePanel = new GamePanel(this);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);

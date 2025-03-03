@@ -1,6 +1,6 @@
 package basics;
 
-import gameObjects.Sprite;
+import baseGameObjects.Sprite;
 import graphics.GamePanel;
 
 import java.awt.*;
@@ -12,6 +12,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
     // Set per tenere traccia dei tasti e dei caratteri premuti
     public static Set<Integer> pressedKeys = new HashSet<>();
     public static Set<Character> pressedChars = new HashSet<>();
+    private static Set<Integer> newlyPressedKeys = new HashSet<>();
+    public static Set<Character> newlyPressedChars = new HashSet<>();
 
     // Variabili per la gestione del mouse
     public static boolean mousePressed = false;  // Se il mouse è premuto
@@ -47,6 +49,23 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
         return pressedChars.contains(keyChar);
     }
 
+    // Verifica se un tasto è stato appena premuto (solo al primo frame della pressione)
+    public static boolean isNewKeyPressed(int keyCode) {
+        if (pressedKeys.contains(keyCode) && !newlyPressedKeys.contains(keyCode)) {
+            newlyPressedKeys.add(keyCode);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isNewKeyPressed(char keyChar) {
+        if (pressedChars.contains(keyChar) && !newlyPressedChars.contains(keyChar)) {
+            newlyPressedChars.add(keyChar);
+            return true;
+        }
+        return false;
+    }
+
     // Metodo chiamato quando una chiave viene premuta
     @Override
     public void keyPressed(KeyEvent e) {
@@ -63,6 +82,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
         char keyChar = e.getKeyChar();
         pressedKeys.remove(keyCode);  // Rimuovi dal set quando la chiave viene rilasciata
         pressedChars.remove(keyChar); // Rimuovi dal set quando la chiave viene rilasciata
+        newlyPressedKeys.remove(keyCode); // Rimuove il tasto dalla lista di nuovi tasti premuti
+        newlyPressedChars.remove(keyChar);
     }
 
     // Metodo chiamato quando una chiave viene digitata
@@ -78,10 +99,10 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
         return mousePressed;
     }
 
-    // Verifica se il mouse è sopra uno sprite
-    public static boolean isMouseOver(Sprite sprite) {
-        int x = (int) sprite.getPosition().x;
-        int y = (int) sprite.getPosition().y;
+    // Verifica se il mouse è sopra uno sprite, considerando la posizione della telecamera
+    public static boolean isMouseOver(Sprite sprite, Vector2 cameraOffset) {
+        int x = (int) sprite.getPosition().x - cameraOffset.x.intValue();
+        int y = (int) sprite.getPosition().y - cameraOffset.y.intValue();
         int width = sprite.getDimension().x.intValue();
         int height = sprite.getDimension().y.intValue();
 
@@ -90,9 +111,9 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
                 mousePosition.y >= y && mousePosition.y <= y + height;
     }
 
-    // Verifica se il mouse è stato cliccato su uno sprite
-    public static boolean isMouseClickedOnSprite(Sprite sprite) {
-        return isMousePressed() && isMouseOver(sprite);
+    // Verifica se il mouse è stato cliccato su uno sprite, considerando la posizione della telecamera
+    public static boolean isMouseClickedOnSprite(Sprite sprite, Vector2 cameraOffset) {
+        return isMousePressed() && isMouseOver(sprite, cameraOffset);
     }
 
     // Gestisce l'evento di clic del mouse

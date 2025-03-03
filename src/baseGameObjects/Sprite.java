@@ -1,4 +1,4 @@
-package gameObjects;
+package baseGameObjects;
 
 import basics.Vector2;
 import graphics.Animation;
@@ -17,6 +17,7 @@ public class Sprite {
     protected int zIndex = 0; // Valore di default zIndex è 0
     protected double rotationAngle = 0; // Angolo di rotazione (in gradi)
     protected Sprite stickedTo = null;
+    protected GamePanel gamePanel;
 
     // Costruttore default !!!PERICOLO!!!
     public Sprite(GamePanel gamePanel) {
@@ -29,6 +30,7 @@ public class Sprite {
         this.dimension = dimension;
         this.animation = animation;
         this.staticImage = null; // Non ha immagine statica
+        this.gamePanel = gamePanel;
         gamePanel.addSprite(this);
     }
 
@@ -38,6 +40,7 @@ public class Sprite {
         this.dimension = dimension;
         this.staticImage = staticImage;
         this.animation = null; // Non ha animazione
+        this.gamePanel = gamePanel;
         gamePanel.addSprite(this);
     }
 
@@ -47,6 +50,7 @@ public class Sprite {
         this.dimension = dimension;
         this.staticImage = null;
         this.animation = null; // Non ha animazione
+        this.gamePanel = gamePanel;
         gamePanel.addSprite(this);
     }
 

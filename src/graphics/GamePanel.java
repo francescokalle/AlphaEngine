@@ -1,8 +1,11 @@
 package graphics;
 
-import gameObjects.Area2D;
-import gameObjects.Collision2D;
-import gameObjects.Sprite;
+import baseGameObjects.Area2D;
+import baseGameObjects.Collision2D;
+import baseGameObjects.Sprite;
+import basics.GameWindow;
+import basics.Input;
+import basics.Vector2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,14 +13,20 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class  GamePanel extends JPanel {
+    private GameWindow gameWindow;
+    private boolean isFullscreen = false; // Stato attuale della finestra
+
+
     private List<Sprite> sprites = new CopyOnWriteArrayList<>();
     private List<Collision2D> collisions = new CopyOnWriteArrayList<>();
     private List<Area2D> areas = new CopyOnWriteArrayList<>();
+    private Vector2 cameraPosition = Vector2.ZERO();
 
-    public GamePanel() {
+    public GamePanel(GameWindow gameWindow) {
         setPreferredSize(new Dimension(1600, 1200));
         setDoubleBuffered(false);
         setIgnoreRepaint(true);
+        this.gameWindow = gameWindow;
 
     }
 
@@ -43,25 +52,55 @@ public class  GamePanel extends JPanel {
         return areas;
     }
 
+    private void toggleFullscreen() {
+        isFullscreen = !isFullscreen; // Cambia stato
+        System.out.println(isFullscreen);
+
+        gameWindow.frame.dispose(); // Chiude temporaneamente la finestra
+        gameWindow.frame.setUndecorated(isFullscreen); // Attiva/disattiva la modalità fullscreen
+        gameWindow.frame.setExtendedState(isFullscreen ? JFrame.MAXIMIZED_BOTH : JFrame.NORMAL);
+
+        if (!isFullscreen) {
+            gameWindow.frame.setSize(800, 600); // Imposta una dimensione standard
+        }
+
+        gameWindow.frame.setVisible(true); // Rende la finestra visibile di nuovo
+        requestFocusInWindow(); // Riporta il focus sugli input
+    }
+
     public void update() {
         for (Sprite sprite : sprites) {
             sprite.update();
         }
+
+        if (Input.isNewKeyPressed(122)){
+            toggleFullscreen();
+        }
         //System.out.println(sprites);
+    }
+
+    public void setCameraPosition(Vector2 position) {
+        this.cameraPosition = position;
+    }
+
+    public Vector2 getCameraPosition() {
+        return cameraPosition;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g.create();
 
-        // Ordina gli sprite in base allo zIndex (dal più piccolo al più grande)
+        // Trasla la visuale in base alla posizione della camera
+        g2d.translate(-cameraPosition.x.intValue(), -cameraPosition.y.intValue());
+
+        // Ordina e disegna gli sprite
         sprites.sort((sprite1, sprite2) -> Integer.compare(sprite1.getZIndex(), sprite2.getZIndex()));
-        //System.out.println(sprites.toString());
-
-        // Disegna gli sprite ordinati
         for (Sprite sprite : sprites) {
-            //System.out.println(sprite.toString());
-            sprite.draw(g);
+            sprite.draw(g2d);
         }
+
+        g2d.dispose();
     }
 }

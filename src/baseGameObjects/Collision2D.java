@@ -1,4 +1,4 @@
-package gameObjects;
+package baseGameObjects;
 
 import basics.Vector2;
 import graphics.Animation;

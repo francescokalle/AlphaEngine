@@ -1,6 +1,5 @@
-package gameObjects;
+package baseGameObjects;
 
-import basics.Input;
 import basics.Vector2;
 import graphics.Animation;
 import graphics.GamePanel;
@@ -8,9 +7,9 @@ import graphics.GamePanel;
 import java.awt.image.BufferedImage;
 
 public class KinematicBody extends Collision2D{
-    private int speed = 5;
-    private Vector2 direction = Vector2.ZERO();
-    private GamePanel gamePanel; // Riferimento a graphics.GamePanel
+    protected int speed = 5;
+    protected Vector2 direction = Vector2.ZERO();
+    protected GamePanel gamePanel; // Riferimento a graphics.GamePanel
 
     // Costruttore per animazione
     public KinematicBody(GamePanel gamePanel, Vector2 position, Vector2 dimension, Animation animation) {
@@ -26,36 +25,19 @@ public class KinematicBody extends Collision2D{
 
     @Override
     public void update() {
-        direction = Vector2.ZERO();
 
-        if(Input.isKeyPressed('w')){
-            direction.y = -1;
-        }
-        if(Input.isKeyPressed('s')){
-            direction.y = 1;
-        }
-        if(Input.isKeyPressed('a')){
-            direction.x = -1;
-        }
-        if(Input.isKeyPressed('d')){
-            direction.x = 1;
-        }
-        //System.out.println(Input.pressedChars);
-
-
-        moveAndCollide();
         super.update();
     }
 
     // Metodo per verificare se il Player sta collidendo con un oggetto
-    private boolean isColliding(int nextX, int nextY, Collision2D obj) {
+    protected boolean isColliding(int nextX, int nextY, Collision2D obj) {
         return nextX < obj.getPosition().x.intValue() + obj.getDimension().x.intValue() &&
                 nextX + dimension.x.intValue() > obj.getPosition().x.intValue() &&
                 nextY < obj.getPosition().y.intValue() + obj.getDimension().y.intValue() &&
                 nextY + dimension.y.intValue() > obj.getPosition().y.intValue();
     }
 
-    private void moveAndCollide() {
+    protected void moveAndCollide() {
         Vector2 nextPositionX = new Vector2(position.x.intValue() + direction.x.intValue() * speed, position.y);
         Vector2 nextPositionY = new Vector2(position.x, position.y.intValue() + direction.y.intValue() * speed);
 
@@ -69,7 +51,7 @@ public class KinematicBody extends Collision2D{
     }
 
     // Controlla se il movimento è bloccato
-    private boolean isBlocked(int nextX, int nextY) {
+    protected boolean isBlocked(int nextX, int nextY) {
         for (Collision2D obj : gamePanel.getAllCollisions()) {
             if (obj != this && isColliding(nextX, nextY, obj)) {
                 return true;
@@ -77,7 +59,7 @@ public class KinematicBody extends Collision2D{
         }
         return false;
     }
-    private boolean isBlocked(Vector2 nextPosition) {
+    protected boolean isBlocked(Vector2 nextPosition) {
         for (Collision2D obj : gamePanel.getAllCollisions()) {
             if (obj != this && isColliding((int) nextPosition.x, (int) nextPosition.y, obj)) {
                 return true;
