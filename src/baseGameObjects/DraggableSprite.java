@@ -26,10 +26,14 @@ public class DraggableSprite extends Sprite {
         gamePanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (isMouseOver(e.getX(), e.getY())) {
+                // Correggi le coordinate del mouse rispetto alla telecamera
+                int mouseX = e.getX() + gamePanel.getCameraPosition().x.intValue();
+                int mouseY = e.getY() + gamePanel.getCameraPosition().y.intValue();
+
+                if (isMouseOver(mouseX, mouseY)) {
                     dragging = true;
-                    offsetX = (int) (e.getX() - position.x.intValue());
-                    offsetY = (int) (e.getY() - position.y.intValue());
+                    offsetX = (int) (mouseX - position.x.intValue());
+                    offsetY = (int) (mouseY - position.y.intValue());
                 }
             }
 
@@ -43,14 +47,22 @@ public class DraggableSprite extends Sprite {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (dragging) {
-                    position.x = e.getX() - offsetX;
-                    position.y = e.getY() - offsetY;
+                    // Correggi le coordinate del mouse rispetto alla telecamera
+                    int mouseX = e.getX() + gamePanel.getCameraPosition().x.intValue();
+                    int mouseY = e.getY() + gamePanel.getCameraPosition().y.intValue();
+
+                    // Aggiorna la posizione dello sprite
+                    position.x = mouseX - offsetX;
+                    position.y = mouseY - offsetY;
                 }
             }
         });
     }
 
     private boolean isMouseOver(int mouseX, int mouseY) {
-        return mouseX >= position.x.intValue() && mouseX <= position.x.intValue() + dimension.x.intValue() && mouseY >= position.y.intValue() && mouseY <= position.y.intValue() + dimension.y.intValue();
+        return mouseX >= position.x.intValue() &&
+                mouseX <= position.x.intValue() + dimension.x.intValue() &&
+                mouseY >= position.y.intValue() &&
+                mouseY <= position.y.intValue() + dimension.y.intValue();
     }
 }
