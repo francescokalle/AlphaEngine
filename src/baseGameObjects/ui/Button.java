@@ -6,7 +6,7 @@ import graphics.GamePanel;
 
 import java.awt.image.BufferedImage;
 
-public class Button extends ClickableSprite {
+public class Button extends ClickableGameObject {
     protected BufferedImage imageIdle;
     protected BufferedImage imageHover;
     protected BufferedImage imageClick;

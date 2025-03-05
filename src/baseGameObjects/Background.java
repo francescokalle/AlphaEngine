@@ -6,7 +6,7 @@ import graphics.GamePanel;
 
 import java.awt.image.BufferedImage;
 
-public class Background extends Sprite{
+public class Background extends GameObject {
     int width;
     int height;
     int default_zIndex = -100;

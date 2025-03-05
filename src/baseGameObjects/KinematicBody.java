@@ -61,7 +61,7 @@ public class KinematicBody extends Collision2D{
     }
     protected boolean isBlocked(Vector2 nextPosition) {
         for (Collision2D obj : gamePanel.getAllCollisions()) {
-            if (obj != this && isColliding((int) nextPosition.x, (int) nextPosition.y, obj)) {
+            if (obj != this && isColliding( nextPosition.x.intValue(), nextPosition.y.intValue(), obj)) {
                 return true;
             }
         }

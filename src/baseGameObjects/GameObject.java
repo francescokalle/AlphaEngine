@@ -6,26 +6,33 @@ import graphics.GamePanel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.System.gc;
 
-public class Sprite {
+public class GameObject {
     protected Vector2 dimension = Vector2.ZERO();
     protected Vector2 position = Vector2.ZERO();
+    protected Vector2 parentOffset = Vector2.ZERO();
+
     protected Animation animation;
     protected BufferedImage staticImage; // Per immagini statiche
     protected int zIndex = 0; // Valore di default zIndex è 0
     protected double rotationAngle = 0; // Angolo di rotazione (in gradi)
-    protected Sprite stickedTo = null;
     protected GamePanel gamePanel;
 
+    protected GameObject stickedTo = null;
+    protected List<GameObject> sons = new ArrayList<>();
+    protected GameObject parent;
+
     // Costruttore default !!!PERICOLO!!!
-    public Sprite(GamePanel gamePanel) {
+    protected GameObject(GamePanel gamePanel) {
         gamePanel.addSprite(this);
     }
 
     // Costruttore per sprite con animazione
-    public Sprite(GamePanel gamePanel, Vector2 position, Vector2 dimension , Animation animation) {
+    protected GameObject(GamePanel gamePanel, Vector2 position, Vector2 dimension , Animation animation) {
         this.position = position;
         this.dimension = dimension;
         this.animation = animation;
@@ -35,7 +42,7 @@ public class Sprite {
     }
 
     // Costruttore per sprite statico
-    public Sprite(GamePanel gamePanel, Vector2 position, Vector2 dimension , BufferedImage staticImage) {
+    protected GameObject(GamePanel gamePanel, Vector2 position, Vector2 dimension , BufferedImage staticImage) {
         this.position = position;
         this.dimension = dimension;
         this.staticImage = staticImage;
@@ -45,7 +52,7 @@ public class Sprite {
     }
 
     // Costruttore per sprite senza grafica
-    public Sprite(GamePanel gamePanel, Vector2 position, Vector2 dimension ) {
+    protected GameObject(GamePanel gamePanel, Vector2 position, Vector2 dimension ) {
         this.position = position;
         this.dimension = dimension;
         this.staticImage = null;
@@ -59,9 +66,13 @@ public class Sprite {
         if (animation != null) {
             animation.update();
         }
+
+        if (parent != null){
+            this.position = parent.position.add(parentOffset);
+        }
     }
 
-    public boolean stickTo(Sprite other){
+    public boolean stickTo(GameObject other){
         if(other.stickedTo == null){
             this.stickedTo = other;
             other.stickedTo = this;
@@ -86,6 +97,28 @@ public class Sprite {
         } else {
             return false;
         }
+    }
+
+    public void addSon(GameObject son){
+        sons.add(son);
+        son.setParent(this);
+    }
+
+    public void removeSon(GameObject son){
+        sons.remove(son);
+        son.removeParent();
+    }
+
+    private void setParent(GameObject parent){
+        this.parent = parent;
+    }
+
+    private void removeParent(){
+        this.parent = null;
+    }
+
+    public void setParentOffset(Vector2 offset){
+        this.parentOffset = offset;
     }
 
     // Metodo di disegno che tiene conto dello zIndex e della rotazione

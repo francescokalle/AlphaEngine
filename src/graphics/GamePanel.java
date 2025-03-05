@@ -2,7 +2,7 @@ package graphics;
 
 import baseGameObjects.Area2D;
 import baseGameObjects.Collision2D;
-import baseGameObjects.Sprite;
+import baseGameObjects.GameObject;
 import basics.GameWindow;
 import basics.Input;
 import basics.Vector2;
@@ -17,7 +17,7 @@ public class  GamePanel extends JPanel {
     private boolean isFullscreen = false; // Stato attuale della finestra
 
 
-    private List<Sprite> sprites = new CopyOnWriteArrayList<>();
+    private List<GameObject> gameObjects = new CopyOnWriteArrayList<>();
     private List<Collision2D> collisions = new CopyOnWriteArrayList<>();
     private List<Area2D> areas = new CopyOnWriteArrayList<>();
     private Vector2 cameraPosition = Vector2.ZERO();
@@ -30,18 +30,18 @@ public class  GamePanel extends JPanel {
 
     }
 
-    public void addSprite(Sprite sprite) {
-        sprites.add(sprite);
-        if (sprite instanceof Collision2D) {
-            collisions.add((Collision2D) sprite);
+    public void addSprite(GameObject gameObject) {
+        gameObjects.add(gameObject);
+        if (gameObject instanceof Collision2D) {
+            collisions.add((Collision2D) gameObject);
         }
-        if (sprite instanceof Area2D) {
-            areas.add((Area2D) sprite);
+        if (gameObject instanceof Area2D) {
+            areas.add((Area2D) gameObject);
         }
     }
 
-    public void removeSprite(Sprite sprite) {
-        sprites.remove(sprite);
+    public void removeSprite(GameObject gameObject) {
+        gameObjects.remove(gameObject);
     }
 
     public List<Collision2D> getAllCollisions() {
@@ -69,8 +69,8 @@ public class  GamePanel extends JPanel {
     }
 
     public void update() {
-        for (Sprite sprite : sprites) {
-            sprite.update();
+        for (GameObject gameObject : gameObjects) {
+            gameObject.update();
         }
 
         if (Input.isNewKeyPressed(122)){
@@ -96,9 +96,9 @@ public class  GamePanel extends JPanel {
         g2d.translate(-cameraPosition.x.intValue(), -cameraPosition.y.intValue());
 
         // Ordina e disegna gli sprite
-        sprites.sort((sprite1, sprite2) -> Integer.compare(sprite1.getZIndex(), sprite2.getZIndex()));
-        for (Sprite sprite : sprites) {
-            sprite.draw(g2d);
+        gameObjects.sort((sprite1, sprite2) -> Integer.compare(sprite1.getZIndex(), sprite2.getZIndex()));
+        for (GameObject gameObject : gameObjects) {
+            gameObject.draw(g2d);
         }
 
         g2d.dispose();

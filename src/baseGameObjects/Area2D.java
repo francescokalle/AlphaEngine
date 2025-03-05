@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Area2D extends Sprite {
+public class Area2D extends GameObject {
     protected boolean debugMode = false;
     private List<Area2D> detectedAreas = new ArrayList<>();
 

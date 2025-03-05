@@ -8,16 +8,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-public class DraggableSprite extends Sprite {
+public class DraggableGameObject extends GameObject {
     private boolean dragging = false;
     private int offsetX, offsetY; // Offset per mantenere la posizione relativa al cursore
 
-    public DraggableSprite(GamePanel gamePanel, Vector2 position, Vector2 dimension, BufferedImage staticImage) {
+    public DraggableGameObject(GamePanel gamePanel, Vector2 position, Vector2 dimension, BufferedImage staticImage) {
         super(gamePanel, position, dimension, staticImage);
         addMouseListeners(gamePanel);
     }
 
-    public DraggableSprite(GamePanel gamePanel, Vector2 position, Vector2 dimension, Animation animation) {
+    public DraggableGameObject(GamePanel gamePanel, Vector2 position, Vector2 dimension, Animation animation) {
         super(gamePanel, position, dimension, animation);
         addMouseListeners(gamePanel);
     }

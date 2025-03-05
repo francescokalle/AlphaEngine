@@ -1,5 +1,5 @@
 import baseGameObjects.ui.Button;
-import baseGameObjects.ui.TextSprite;
+import baseGameObjects.ui.TextGameObject;
 import basics.*;
 import baseGameObjects.*;
 import customGameObjects.Player;
@@ -31,9 +31,13 @@ public class MainGame {
         Player player = new Player(gamePanel, new Vector2(600, 600), new Vector2(200, 200), playerImage);
         Collision2D muretto = new Collision2D(gamePanel, new Vector2(100, 100), new Vector2(30, 600));
         muretto.enableDebug(true);
-        DraggableSprite draggableSprite = new DraggableSprite(gamePanel, new Vector2(300, 600), new Vector2(100, 100), playerImage);
+        DraggableGameObject draggableSprite = new DraggableGameObject(gamePanel, new Vector2(300, 600), new Vector2(100, 100), playerImage);
         //player.stickTo(draggableSprite);
-        TextSprite textSprite = new TextSprite(gamePanel,new Vector2((float) gamePanel.getWidth() /2, (float) gamePanel.getHeight() /2), "aiutooooo\nsono down", "right", defaultFontFile, new Color(0, 255, 0), 5);
+        draggableSprite.addSon(draggableSprite);
+
+
+
+        TextGameObject textSprite = new TextGameObject(gamePanel,new Vector2((float) gamePanel.getWidth() /2, (float) gamePanel.getHeight() /2), "aiutooooo\nsono down", "right", defaultFontFile, new Color(0, 255, 0), 5);
         textSprite.setZIndex(-9);
 
         Button button = new Button(gamePanel, new Vector2(400, 300),  new Vector2(400, 200), "/button");

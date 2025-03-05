@@ -3,7 +3,7 @@ package baseGameObjects;
 import basics.Vector2;
 import graphics.GamePanel;
 
-public class Camera2D extends Sprite {
+public class Camera2D extends GameObject {
     private GamePanel gamePanel;
     private boolean isActive = true; // Se true, la camera controlla la visuale
 

@@ -1,6 +1,6 @@
 package baseGameObjects.ui;
 
-import baseGameObjects.Sprite;
+import baseGameObjects.GameObject;
 import basics.Vector2;
 import graphics.GamePanel;
 
@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class TextSprite extends Sprite {
+public class TextGameObject extends GameObject {
 
     private String text;
     private Font font;
@@ -20,7 +20,7 @@ public class TextSprite extends Sprite {
     private int fontSize;
     private int scalingFactor = 1; // Valore di default per lo scaling
 
-    public TextSprite(GamePanel gamePanel, Vector2 position, String text, String alignment, File fontFile, Color color, int fontSize) throws IOException, FontFormatException {
+    public TextGameObject(GamePanel gamePanel, Vector2 position, String text, String alignment, File fontFile, Color color, int fontSize) throws IOException, FontFormatException {
         super(gamePanel, position, Vector2.ZERO()); // Passiamo width e height come 0, lo calcoleremo dopo
         this.text = Objects.requireNonNull(text, "Text cannot be null");
         this.font = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(fontFile, "Font file cannot be null"));

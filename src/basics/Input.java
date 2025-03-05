@@ -1,6 +1,6 @@
 package basics;
 
-import baseGameObjects.Sprite;
+import baseGameObjects.GameObject;
 import graphics.GamePanel;
 
 import java.awt.*;
@@ -100,11 +100,11 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
     }
 
     // Verifica se il mouse è sopra uno sprite, considerando la posizione della telecamera
-    public static boolean isMouseOver(Sprite sprite, Vector2 cameraOffset) {
-        int x = (int) sprite.getPosition().x - cameraOffset.x.intValue();
-        int y = (int) sprite.getPosition().y - cameraOffset.y.intValue();
-        int width = sprite.getDimension().x.intValue();
-        int height = sprite.getDimension().y.intValue();
+    public static boolean isMouseOver(GameObject gameObject, Vector2 cameraOffset) {
+        int x = (int) gameObject.getPosition().x - cameraOffset.x.intValue();
+        int y = (int) gameObject.getPosition().y - cameraOffset.y.intValue();
+        int width = gameObject.getDimension().x.intValue();
+        int height = gameObject.getDimension().y.intValue();
 
         // Verifica se la posizione del mouse è all'interno delle dimensioni dello sprite
         return mousePosition.x >= x && mousePosition.x <= x + width &&
@@ -112,8 +112,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
     }
 
     // Verifica se il mouse è stato cliccato su uno sprite, considerando la posizione della telecamera
-    public static boolean isMouseClickedOnSprite(Sprite sprite, Vector2 cameraOffset) {
-        return isMousePressed() && isMouseOver(sprite, cameraOffset);
+    public static boolean isMouseClickedOnSprite(GameObject gameObject, Vector2 cameraOffset) {
+        return isMousePressed() && isMouseOver(gameObject, cameraOffset);
     }
 
     // Gestisce l'evento di clic del mouse

@@ -1,18 +1,18 @@
 package baseGameObjects.ui;
 
-import baseGameObjects.Sprite;
+import baseGameObjects.GameObject;
 import basics.Vector2;
 import graphics.GamePanel;
 import basics.Input;
 
-public abstract class ClickableSprite extends Sprite {
+public abstract class ClickableGameObject extends GameObject {
 
     private boolean isHovered = false; // Indica se il mouse è sopra lo sprite
     private boolean isClicked = false; // Indica se lo sprite è stato cliccato
     private boolean wasClicked = false; // Indica se lo sprite era cliccato nel frame precedente
 
     // Costruttore per uno sprite cliccabile
-    public ClickableSprite(GamePanel gamePanel, Vector2 position, Vector2 dimension) {
+    public ClickableGameObject(GamePanel gamePanel, Vector2 position, Vector2 dimension) {
         super(gamePanel, position, dimension);
     }
 
