@@ -9,6 +9,8 @@ import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class TextGameObject extends GameObject {
@@ -18,119 +20,146 @@ public class TextGameObject extends GameObject {
     private String alignment;
     private Color textColor;
     private int fontSize;
-    private int scalingFactor = 1; // Valore di default per lo scaling
+    private int scalingFactor = 1;
+    private Vector2 maxSize;
 
-    public TextGameObject(GamePanel gamePanel, Vector2 position, String text, String alignment, File fontFile, Color color, int fontSize) throws IOException, FontFormatException {
-        super(gamePanel, position, Vector2.ZERO()); // Passiamo width e height come 0, lo calcoleremo dopo
+    public TextGameObject(GamePanel gamePanel, Vector2 position, String text, String alignment, File fontFile, Color color, int fontSize, Vector2 maxSize) throws IOException, FontFormatException {
+        super(gamePanel, position, Vector2.ZERO());
         this.text = Objects.requireNonNull(text, "Text cannot be null");
         this.font = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(fontFile, "Font file cannot be null"));
         this.alignment = Objects.requireNonNull(alignment, "Alignment cannot be null");
-        this.textColor = color != null ? color : Color.BLACK; // Usa il colore passato, se presente
+        this.textColor = color != null ? color : Color.BLACK;
         this.fontSize = fontSize;
+        this.maxSize = maxSize;
 
-        // Estrai lo scaling factor dal nome del file del font (se è pixelato)
         extractScalingFactorFromFont(fontFile.getName());
 
-        // Calcola automaticamente le dimensioni del testo
-        Dimension textDimensions = calculateTextDimensions(text);
-        this.dimension.x = textDimensions.width;
-        this.dimension.y = textDimensions.height;
+        adjustTextToFit();
 
-        // Genera l'immagine del testo
-        super.staticImage = generateTextImage(text, dimension);
+        super.staticImage = generateTextImage();
     }
 
-    // Estrai lo scaling factor dal nome del file del font
     private void extractScalingFactorFromFont(String fontName) {
         try {
-            // Esempio di nome file: "fontname.pixelated.2.ttf"
             String[] parts = fontName.split("\\.");
             if (parts.length >= 3 && parts[1].equals("pixelated")) {
-                // Ottieni il fattore di scaling (la parte dopo ".pixelated.")
                 scalingFactor = Integer.parseInt(parts[2]);
             }
         } catch (Exception e) {
             System.err.println("Impossibile estrarre lo scaling factor dal nome del font. Verrà utilizzato il valore di default (1).");
-            scalingFactor = 1; // Imposta a 1 se non è possibile analizzare il file
+            scalingFactor = 1;
         }
     }
 
-    private Dimension calculateTextDimensions(String text) {
+    private void adjustTextToFit() {
         BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = image.createGraphics();
 
-        // Imposta il font con la dimensione corretta e lo scaling
         Font scaledFont = font.deriveFont(Font.PLAIN, fontSize * scalingFactor);
         g2d.setFont(scaledFont);
 
-        // Dividi il testo in linee
-        String[] lines = text.split("\n");
+        List<String> lines = wrapText(g2d, text, maxSize.x.intValue());
 
-        // Calcola la larghezza e l'altezza totali del testo
-        int maxWidth = 0;
-        int totalHeight = 0;
+        int totalHeight = calculateTotalHeight(g2d, scaledFont, lines);
 
-        for (String line : lines) {
-            TextLayout layout = new TextLayout(line, scaledFont, g2d.getFontRenderContext());
-            int textWidth = (int) layout.getBounds().getWidth();
-            int textHeight = (int) layout.getBounds().getHeight();
-
-            if (textWidth > maxWidth) {
-                maxWidth = textWidth;
-            }
-            totalHeight += textHeight;
+        while (totalHeight > maxSize.y.intValue() && fontSize > 5) {
+            fontSize--;
+            scaledFont = font.deriveFont(Font.PLAIN, fontSize * scalingFactor);
+            g2d.setFont(scaledFont);
+            lines = wrapText(g2d, text, maxSize.x.intValue());
+            totalHeight = calculateTotalHeight(g2d, scaledFont, lines);
         }
 
+        int maxWidthUsed = 0;
+        for (String line : lines) {
+            int width = g2d.getFontMetrics().stringWidth(line);
+            if (width > maxWidthUsed) {
+                maxWidthUsed = width;
+            }
+        }
+
+        this.dimension.x = Math.min(maxSize.x.intValue(), maxWidthUsed);
+        this.dimension.y = totalHeight;
+
         g2d.dispose();
-        return new Dimension(maxWidth, totalHeight);
     }
 
-    private BufferedImage generateTextImage(String text, Vector2 dimension) {
-        // Crea un'immagine vuota
+    private List<String> wrapText(Graphics2D g2d, String text, int maxWidth) {
+        List<String> lines = new ArrayList<>();
+        FontMetrics metrics = g2d.getFontMetrics();
+        String[] words = text.split(" ");
+        StringBuilder currentLine = new StringBuilder();
+
+        for (String word : words) {
+            String testLine = currentLine.length() == 0 ? word : currentLine + " " + word;
+            int textWidth = metrics.stringWidth(testLine);
+
+            if (textWidth > maxWidth && currentLine.length() > 0) {
+                lines.add(currentLine.toString());
+                currentLine = new StringBuilder(word);
+            } else if (textWidth > maxWidth) {
+                // Spezza la parola troppo lunga
+                StringBuilder brokenWord = new StringBuilder();
+                for (char c : word.toCharArray()) {
+                    if (metrics.stringWidth(brokenWord.toString() + c) > maxWidth) {
+                        lines.add(brokenWord.toString());
+                        brokenWord = new StringBuilder();
+                    }
+                    brokenWord.append(c);
+                }
+                if (brokenWord.length() > 0) {
+                    lines.add(brokenWord.toString());
+                }
+                currentLine = new StringBuilder();
+            } else {
+                currentLine = new StringBuilder(testLine);
+            }
+        }
+
+        if (currentLine.length() > 0) {
+            lines.add(currentLine.toString());
+        }
+
+        return lines;
+    }
+
+    private int calculateTotalHeight(Graphics2D g2d, Font font, List<String> lines) {
+        FontMetrics metrics = g2d.getFontMetrics(font);
+        return lines.size() * metrics.getHeight();
+    }
+
+    private BufferedImage generateTextImage() {
         BufferedImage image = new BufferedImage(dimension.x.intValue(), dimension.y.intValue(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = image.createGraphics();
-
-        // Disabilita l'antialiasing per mantenere l'aspetto pixelato
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
-        // Imposta il font con la dimensione corretta e lo scaling
         Font scaledFont = font.deriveFont(Font.PLAIN, fontSize * scalingFactor);
         g2d.setFont(scaledFont);
         g2d.setColor(textColor);
 
-        // Dividi il testo in linee
-        String[] lines = text.split("\n");
+        List<String> lines = wrapText(g2d, text, maxSize.x.intValue());
 
-        // Posizione iniziale per il disegno del testo
         int yPos = 0;
-
-        // Disegna ogni linea
         for (String line : lines) {
             TextLayout layout = new TextLayout(line, scaledFont, g2d.getFontRenderContext());
 
-            // Calcola la posizione e l'allineamento del testo
             int textWidth = (int) layout.getBounds().getWidth();
-            int textHeight = (int) layout.getBounds().getHeight();
-
             int xPos = 0;
             switch (alignment) {
                 case "center":
                     xPos = (dimension.x.intValue() - textWidth) / 2;
                     break;
                 case "right":
-                    xPos = dimension.x.intValue() - textWidth; // Allinea a destra
+                    xPos = dimension.x.intValue() - textWidth;
                     break;
                 case "left":
                 default:
-                    xPos = 0; // Allinea a sinistra (default)
+                    xPos = 0;
                     break;
             }
 
-            // Disegna la linea
             layout.draw(g2d, xPos, yPos + (int) layout.getAscent());
-
-            // Aggiorna la posizione verticale per la prossima linea
-            yPos += textHeight;
+            yPos += layout.getBounds().getHeight();
         }
 
         g2d.dispose();
@@ -138,13 +167,11 @@ public class TextGameObject extends GameObject {
     }
 
     @Override
-    public void update() {
-        // Aggiungi la logica di aggiornamento se necessario
-    }
+    public void update() {}
 
     @Override
     public void draw(Graphics g) {
-        BufferedImage textImage = generateTextImage(text, dimension);
+        BufferedImage textImage = generateTextImage();
         g.drawImage(textImage, position.x.intValue(), position.y.intValue(), null);
     }
 }
