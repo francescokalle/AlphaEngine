@@ -1,6 +1,5 @@
-package baseGameObjects.ui;
+package baseGameObjects;
 
-import baseGameObjects.GameObject;
 import basics.Vector2;
 import graphics.GamePanel;
 import basics.Input;
