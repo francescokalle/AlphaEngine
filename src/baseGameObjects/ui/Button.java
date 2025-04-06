@@ -21,37 +21,47 @@ public class Button extends ClickableGameObject {
 
         if (imageIdle == null){
             throw new RuntimeException("Il bottone deve avere almeno l immagine di idle");
+        }else {
+            staticImage = imageIdle;
         }
 
     }
 
     @Override
     public void onIdle() {
-        staticImage = imageIdle;
+        //staticImage = imageIdle;
     }
 
     @Override
     public void onHover() {
         if (imageHover != null){
             staticImage = imageHover;
-        } else {
-            staticImage = imageIdle;
+
         }
+        //System.out.println("hover");
     }
 
     @Override
     public void onClick() {
-        if (imageClick != null){
+        System.out.println("cliccato");
+        if(imageClick != null) {
             staticImage = imageClick;
         }
     }
 
     @Override
-    public void update() {
-        if (isJustClicked()){
-            System.out.println("premuto");
-        }
+    public void onPressed() {
 
+    }
+
+    @Override
+    public void justReleased() {
+        System.out.println("just released___________________________________________");
+        staticImage = imageIdle;
+    }
+
+    @Override
+    public void update() {
         super.update();
     }
 }
