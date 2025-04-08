@@ -63,11 +63,13 @@ public class GameObject {
 
     // Metodo di aggiornamento
     public void update() {
+        //System.out.println(parent);
         if (animation != null) {
             animation.update();
         }
 
         if (parent != null){
+            System.out.println("genitore");
             this.position = parent.position.add(parentOffset);
         }
     }
@@ -76,7 +78,6 @@ public class GameObject {
         if(other.stickedTo == null){
             this.stickedTo = other;
             other.stickedTo = this;
-
             this.position = stickedTo.position;
             stickedTo.position = this.position;
             return true;
@@ -102,18 +103,23 @@ public class GameObject {
     public void addSon(GameObject son){
         sons.add(son);
         son.setParent(this);
+        System.out.println("parent: " + this + " son: " + son);
     }
 
     public void removeSon(GameObject son){
         sons.remove(son);
         son.removeParent();
+
+        son.position = new Vector2(son.position.x, son.position.y);
     }
 
-    private void setParent(GameObject parent){
+    public void setParent(GameObject parent){
         this.parent = parent;
+        System.out.println(this.parent + " settato come parent di: " + this);
+
     }
 
-    private void removeParent(){
+    public void removeParent(){
         this.parent = null;
     }
 

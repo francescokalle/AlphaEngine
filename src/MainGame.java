@@ -32,7 +32,8 @@ public class MainGame {
         Collision2D muretto = new Collision2D(gamePanel, new Vector2(100, 100), new Vector2(30, 600));
         muretto.enableDebug(true);
         DraggableGameObject draggableSprite = new DraggableGameObject(gamePanel, new Vector2(300, 600), new Vector2(100, 100), playerImage);
-        draggableSprite.addSon(draggableSprite);
+
+        player.addSon(draggableSprite);
 
         TextGameObject textSprite = new TextGameObject(gamePanel, new Vector2((float) gamePanel.getWidth() / 2, (float) gamePanel.getHeight() / 2),
                 "Alpha engine 0.0.0 #16 internal", "left", defaultFontFile, new Color(0, 255, 0), 5, new Vector2(600, 600));

@@ -43,7 +43,7 @@ public class Button extends ClickableGameObject {
 
     @Override
     public void onClick() {
-        System.out.println("cliccato");
+        //System.out.println("cliccato");
         if(imageClick != null) {
             staticImage = imageClick;
         }
@@ -56,7 +56,7 @@ public class Button extends ClickableGameObject {
 
     @Override
     public void justReleased() {
-        System.out.println("just released___________________________________________");
+        //System.out.println("just released___________________________________________");
         staticImage = imageIdle;
     }
 
