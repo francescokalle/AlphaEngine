@@ -33,11 +33,13 @@ public class MainGame {
         muretto.enableDebug(true);
         DraggableGameObject draggableSprite = new DraggableGameObject(gamePanel, new Vector2(300, 600), new Vector2(100, 100), playerImage);
 
-        player.addSon(draggableSprite);
 
-        TextGameObject textSprite = new TextGameObject(gamePanel, new Vector2((float) gamePanel.getWidth() / 2, (float) gamePanel.getHeight() / 2),
-                "Alpha engine 0.0.0 #16 internal", "left", defaultFontFile, new Color(0, 255, 0), 5, new Vector2(600, 600));
+
+        TextGameObject textSprite = new TextGameObject(gamePanel, new Vector2(player.getPosition().x.doubleValue(), player.getPosition().y.doubleValue() - player.getDimension().y.doubleValue() - 1),
+                "Kalle", "center", defaultFontFile, new Color(0, 255, 0), 2, new Vector2(player.getDimension().x.doubleValue(), 600));
         textSprite.setZIndex(-9);
+
+        player.addSon(draggableSprite);
 
         Button button = new Button(gamePanel, new Vector2(400, 300), new Vector2(400, 200), "/button");
 

@@ -20,7 +20,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
     private boolean running = true;
     private final int UPDATE_RATE = 16; // Circa 60 aggiornamenti al secondo
-    private GamePanel gamePanel;
+    private static GamePanel gamePanel;
 
     public Input(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -85,8 +85,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
     }
 
     public static boolean isMouseOver(GameObject gameObject, Vector2 cameraOffset) {
-        int x = (int) gameObject.getPosition().x - cameraOffset.x.intValue();
-        int y = (int) gameObject.getPosition().y - cameraOffset.y.intValue();
+        int x = gameObject.getPosition().x.intValue() - cameraOffset.x.intValue();
+        int y = gameObject.getPosition().y.intValue() - cameraOffset.y.intValue();
         int width = gameObject.getDimension().x.intValue();
         int height = gameObject.getDimension().y.intValue();
 
@@ -110,8 +110,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
     @Override public void mouseDragged(MouseEvent e) { mousePosition = e.getPoint(); }
     @Override public void mouseWheelMoved(MouseWheelEvent e) { mouseWheelRotation = e.getWheelRotation(); }
 
-    public static Point getMousePosition() {
-        return mousePosition;
+    public static Vector2 getMousePosition(Vector2 cameraOffset) {
+        return new Vector2(mousePosition.x + cameraOffset.x.intValue(), mousePosition.y + cameraOffset.y.intValue());
     }
 
     public static int getMouseWheelRotation() {

@@ -22,7 +22,6 @@ public abstract class ClickableGameObject extends GameObject {
     // Metodo di aggiornamento
     @Override
     public void update() {
-        System.out.println(this.parent);
         // Ottieni la posizione della telecamera dal GamePanel
         Vector2 cameraPosition = gamePanel.getCameraPosition();
 
@@ -65,6 +64,8 @@ public abstract class ClickableGameObject extends GameObject {
         mouseWasAlreadyPressedOutside = Input.isMousePressed() && !isPressed;
 
         //System.out.println(mouseWasAlreadyPressedOutside);
+
+        super.update();
     }
 
     // Metodi astratti da implementare nelle classi figlie

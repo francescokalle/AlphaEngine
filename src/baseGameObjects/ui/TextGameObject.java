@@ -167,7 +167,9 @@ public class TextGameObject extends GameObject {
     }
 
     @Override
-    public void update() {}
+    public void update() {
+        super.update();
+    }
 
     @Override
     public void draw(Graphics g) {
