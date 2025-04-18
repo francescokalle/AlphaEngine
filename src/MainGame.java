@@ -16,9 +16,6 @@ public class MainGame {
         GameWindow gameWindow = new GameWindow();
         GamePanel gamePanel = gameWindow.getGamePanel();
 
-        Camera2D camera = new Camera2D(gamePanel, new Vector2(400, 300));
-        camera.setActive(true);
-
         File defaultFontFile = new File("resources/fonts/defaultfont.pixelated.20.otf");
 
         // Carica la sprite sheet per il player

@@ -12,11 +12,9 @@ import java.awt.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class  GamePanel extends JPanel {
+public class GamePanel extends JPanel {
     private GameWindow gameWindow;
-    private boolean isFullscreen = false; // Stato attuale della finestra
-
-
+    private boolean isFullscreen = false;
     private List<GameObject> gameObjects = new CopyOnWriteArrayList<>();
     private List<Collision2D> collisions = new CopyOnWriteArrayList<>();
     private List<Area2D> areas = new CopyOnWriteArrayList<>();
@@ -27,7 +25,6 @@ public class  GamePanel extends JPanel {
         setDoubleBuffered(false);
         setIgnoreRepaint(true);
         this.gameWindow = gameWindow;
-
     }
 
     public void addSprite(GameObject gameObject) {
@@ -53,19 +50,17 @@ public class  GamePanel extends JPanel {
     }
 
     private void toggleFullscreen() {
-        isFullscreen = !isFullscreen; // Cambia stato
-        System.out.println(isFullscreen);
-
-        gameWindow.frame.dispose(); // Chiude temporaneamente la finestra
-        gameWindow.frame.setUndecorated(isFullscreen); // Attiva/disattiva la modalità fullscreen
+        isFullscreen = !isFullscreen;
+        gameWindow.frame.dispose();
+        gameWindow.frame.setUndecorated(isFullscreen);
         gameWindow.frame.setExtendedState(isFullscreen ? JFrame.MAXIMIZED_BOTH : JFrame.NORMAL);
 
         if (!isFullscreen) {
-            gameWindow.frame.setSize(800, 600); // Imposta una dimensione standard
+            gameWindow.frame.setSize(800, 600);
         }
 
-        gameWindow.frame.setVisible(true); // Rende la finestra visibile di nuovo
-        requestFocusInWindow(); // Riporta il focus sugli input
+        gameWindow.frame.setVisible(true);
+        requestFocusInWindow();
     }
 
     public void update() {
@@ -73,10 +68,9 @@ public class  GamePanel extends JPanel {
             gameObject.update();
         }
 
-        if (Input.isNewKeyPressed(122)){
+        if (Input.isNewKeyPressed(122)) {
             toggleFullscreen();
         }
-        //System.out.println(sprites);
     }
 
     public void setCameraPosition(Vector2 position) {
@@ -102,5 +96,13 @@ public class  GamePanel extends JPanel {
         }
 
         g2d.dispose();
+    }
+
+    public int getWidth() {
+        return super.getWidth();
+    }
+
+    public int getHeight() {
+        return super.getHeight();
     }
 }
