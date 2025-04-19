@@ -16,10 +16,10 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
     public static boolean mousePressed = false;
     public static Point mousePosition = new Point(0, 0);
-    public static int mouseWheelRotation = 0;
+    private static int mouseWheelDelta = 0;
 
     private boolean running = true;
-    private final int UPDATE_RATE = 16; // Circa 60 aggiornamenti al secondo
+    private final int UPDATE_RATE = 16;
     private static GamePanel gamePanel;
 
     public Input(GamePanel gamePanel) {
@@ -36,7 +36,6 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
         gamePanel.requestFocusInWindow();
     }
 
-    // --- Metodi per la gestione della tastiera ---
     public static boolean isKeyPressed(int keyCode) {
         return pressedKeys.contains(keyCode);
     }
@@ -46,7 +45,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
     }
 
     public static boolean isNewKeyPressed(int keyCode) {
-            return newlyPressedKeys.contains(keyCode);
+        return newlyPressedKeys.contains(keyCode);
     }
 
     public static boolean isNewKeyPressed(char keyChar) {
@@ -79,7 +78,6 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
     @Override public void keyTyped(KeyEvent e) {}
 
-    // --- Metodi per la gestione del mouse ---
     public static boolean isMousePressed() {
         return mousePressed;
     }
@@ -98,33 +96,32 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
         return mousePressed && isMouseOver(gameObject, cameraOffset);
     }
 
-
     @Override public void mouseClicked(MouseEvent e) {}
     @Override public void mousePressed(MouseEvent e) { mousePressed = true; }
-    @Override public void mouseReleased(MouseEvent e) {
-        mousePressed = false;
-    }
+    @Override public void mouseReleased(MouseEvent e) { mousePressed = false; }
     @Override public void mouseEntered(MouseEvent e) {}
     @Override public void mouseExited(MouseEvent e) {}
     @Override public void mouseMoved(MouseEvent e) { mousePosition = e.getPoint(); }
     @Override public void mouseDragged(MouseEvent e) { mousePosition = e.getPoint(); }
-    @Override public void mouseWheelMoved(MouseWheelEvent e) { mouseWheelRotation = e.getWheelRotation(); }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        mouseWheelDelta += e.getWheelRotation();
+    }
+
+    public static int getMouseWheelRotation() {
+        int rotation = mouseWheelDelta;
+        mouseWheelDelta = 0;
+        return rotation;
+    }
 
     public static Vector2 getMousePosition(Vector2 cameraOffset) {
         return new Vector2(mousePosition.x + cameraOffset.x.intValue(), mousePosition.y + cameraOffset.y.intValue());
     }
 
-    public static int getMouseWheelRotation() {
-        return mouseWheelRotation;
-    }
-
-    // --- Thread per gestire gli input separatamente ---
     private void update() {
         newlyPressedKeys.clear();
         newlyPressedChars.clear();
-        mouseWheelRotation = 0;
-        //System.out.println(mouseClicked);
-        //System.out.println(mouseClicked);
     }
 
     @Override

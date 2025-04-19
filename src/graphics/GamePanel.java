@@ -19,6 +19,7 @@ public class GamePanel extends JPanel {
     private List<Collision2D> collisions = new CopyOnWriteArrayList<>();
     private List<Area2D> areas = new CopyOnWriteArrayList<>();
     private Vector2 cameraPosition = Vector2.ZERO();
+    private float cameraZoom = 1.0f;
 
     public GamePanel(GameWindow gameWindow) {
         setPreferredSize(new Dimension(1600, 1200));
@@ -68,7 +69,7 @@ public class GamePanel extends JPanel {
             gameObject.update();
         }
 
-        if (Input.isNewKeyPressed(122)) {
+        if (Input.isNewKeyPressed(122)) { // Tasto F11
             toggleFullscreen();
         }
     }
@@ -81,12 +82,31 @@ public class GamePanel extends JPanel {
         return cameraPosition;
     }
 
+    public void setCameraZoom(float zoom) {
+        this.cameraZoom = zoom;
+    }
+
+    public float getCameraZoom() {
+        return cameraZoom;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
-        // Trasla la visuale in base alla posizione della camera
+        // Calcola il centro dello schermo per il pivot
+        int centerX = getWidth() / 2;
+        int centerY = getHeight() / 2;
+
+        // Trasformazioni in ordine corretto:
+        // 1. Trasla al centro
+        // 2. Applica lo zoom
+        // 3. Trasla indietro
+        // 4. Applica offset camera
+        g2d.translate(centerX, centerY);
+        g2d.scale(cameraZoom, cameraZoom);
+        g2d.translate(-centerX, -centerY);
         g2d.translate(-cameraPosition.x.intValue(), -cameraPosition.y.intValue());
 
         // Ordina e disegna gli sprite
@@ -97,7 +117,6 @@ public class GamePanel extends JPanel {
 
         g2d.dispose();
     }
-
     public int getWidth() {
         return super.getWidth();
     }
